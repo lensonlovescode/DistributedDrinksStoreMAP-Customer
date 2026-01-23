@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="#0F0F0F">
+
+<!-- Title -->
+<TextView
+    android:id="@+id/tvSelectBranch"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Select Branch"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    android:textColor="#FFA500"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="32dp"/>
+
+<!-- Nairobi -->
+<Button
+    android:id="@+id/btnNairobi"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:text="Nairobi (Headquarters)"
+    android:textColor="#FFFFFF"
+    android:backgroundTint="#1C1C1C"
+    app:layout_constraintTop_toBottomOf="@id/tvSelectBranch"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="32dp"
+    android:layout_marginHorizontal="32dp"/>
+
+<!-- Kisumu -->
+<Button
+    android:id="@+id/btnKisumu"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:text="Kisumu"
+    android:textColor="#FFFFFF"
+    android:backgroundTint="#1C1C1C"
+    app:layout_constraintTop_toBottomOf="@id/btnNairobi"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="32dp"/>
+
+<!-- Mombasa -->
+<Button
+    android:id="@+id/btnMombasa"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:text="Mombasa"
+    android:textColor="#FFFFFF"
+    android:backgroundTint="#1C1C1C"
+    app:layout_constraintTop_toBottomOf="@id/btnKisumu"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="32dp"/>
+
+<!-- Nakuru -->
+<Button
+    android:id="@+id/btnNakuru"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:text="Nakuru"
+    android:textColor="#FFFFFF"
+    android:backgroundTint="#1C1C1C"
+    app:layout_constraintTop_toBottomOf="@id/btnMombasa"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="32dp"/>
+
+<!-- Eldoret -->
+<Button
+    android:id="@+id/btnEldoret"
+    android:layout_width="0dp"
+    android:layout_height="56dp"
+    android:text="Eldoret"
+    android:textColor="#FFFFFF"
+    android:backgroundTint="#1C1C1C"
+    app:layout_constraintTop_toBottomOf="@id/btnNakuru"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="32dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

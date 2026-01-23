@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DistributedDrinksStoreCustomer">
         <activity
+            android:name=".BranchSelectionActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
