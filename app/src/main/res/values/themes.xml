@@ -5,14 +5,13 @@
         <item name="android:windowBackground">@color/dark_background</item>
         <item name="colorSurface">@color/surface_dark</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <style name="Theme.DrinksStore" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-            <item name="colorPrimary">@color/primary_orange</item>
-            <item name="colorSecondary">@color/primary_orange</item>
-            <item name="android:windowBackground">@color/black_bg</item>
-        </style>
+    </style>
 
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Alternate theme (kept as separate style) -->
+    <style name="Theme.DrinksStore" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_orange</item>
+        <item name="colorSecondary">@color/primary_orange</item>
+        <item name="android:windowBackground">@color/black_bg</item>
     </style>
 
     <style name="Theme.DistributedDrinksStoreCustomer" parent="Base.Theme.DistributedDrinksStoreCustomer" />

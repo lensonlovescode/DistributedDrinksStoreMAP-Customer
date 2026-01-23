@@ -22,7 +22,7 @@ public class LoginVsSignupActivity extends AppCompatActivity {
         });
 
         signupBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SignUpActivity.class);
+            Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
         });
     }
