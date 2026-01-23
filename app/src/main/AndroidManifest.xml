@@ -32,7 +32,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".SignUpActivity"
+            android:name=".SignupActivity"
             android:exported="false" />
 
         <activity
@@ -55,14 +55,6 @@
         <activity
             android:name=".ReceiptActivity"
             android:exported="false" />
-
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginVsSignupActivity" />
-        <activity android:name=".BranchSelectionActivity" />
-        <activity android:name=".DrinksSelectionActivity" />
-        <activity android:name=".PaymentActivity" />
-        <activity android:name=".ReceiptActivity" />
         <activity android:name=".SelectPaymentMethodActivity" />
     </application>
 

@@ -39,9 +39,7 @@ dependencies {
     implementation(libs.constraintlayout)
     
     // Networking
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.gson)
-    implementation(libs.okhttp.logging)
+    implementation(libs.volley)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
