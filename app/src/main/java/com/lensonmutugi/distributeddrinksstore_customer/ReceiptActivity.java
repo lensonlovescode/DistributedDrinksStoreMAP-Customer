@@ -21,15 +21,20 @@ public class ReceiptActivity extends AppCompatActivity {
         TextView tvReceiptDetails = findViewById(R.id.tvReceiptDetails);
         Button btnBackHome = findViewById(R.id.btnBackHome);
 
+        // Get data from Intent
         String total = getIntent().getStringExtra("TOTAL_AMOUNT");
-        String orderId = "#" + (int) (Math.random() * 100000);
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String orderId = getIntent().getStringExtra("ORDER_ID");
+        String mpesaReceipt = getIntent().getStringExtra("MPESA_RECEIPT");
+        
+        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
-        String receiptText = "Order ID: " + orderId + "\n" +
-                "Total Paid: " + (total != null ? total : "$0.00") + "\n" +
-                "Date: " + date;
+        StringBuilder receiptBuilder = new StringBuilder();
+        receiptBuilder.append("Order ID: ").append(orderId != null ? orderId : "N/A").append("\n");
+        receiptBuilder.append("M-Pesa Ref: ").append(mpesaReceipt != null ? mpesaReceipt : "N/A").append("\n");
+        receiptBuilder.append("Total Paid: ").append(total != null ? total : "Ksh 0.00").append("\n");
+        receiptBuilder.append("Date: ").append(date);
 
-        tvReceiptDetails.setText(receiptText);
+        tvReceiptDetails.setText(receiptBuilder.toString());
 
         btnBackHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, BranchSelectionActivity.class);
