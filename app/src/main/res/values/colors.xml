@@ -8,3 +8,14 @@
     <color name="dark_background">#121212</color>
     <color name="surface_dark">#1E1E1E</color>
 </resources>
+    <color name="black_bg">#0F0F0F</color>
+    <color name="card_bg">#1A1A1A</color>
+    <color name="primary_orange">#FF8C32</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+
+</resources>
+    <color name="orange_primary">#FF7F00</color>
+    <color name="dark_background">#121212</color>
+    <color name="light_grey_background">#F0F0F0</color>
+</resources>
