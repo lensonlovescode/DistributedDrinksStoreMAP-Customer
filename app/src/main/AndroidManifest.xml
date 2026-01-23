@@ -3,6 +3,8 @@
     package="com.lensonmutugi.distributeddrinksstore_customer"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,6 +27,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginVsSignupActivity" />
+        <activity android:name=".BranchSelectionActivity" />
+        <activity android:name=".DrinksSelectionActivity" />
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".ReceiptActivity" />
         <activity android:name=".SelectPaymentMethodActivity" />
     </application>
 
