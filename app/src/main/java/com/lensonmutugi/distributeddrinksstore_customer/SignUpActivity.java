@@ -19,7 +19,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private EditText nameInput, emailInput, passwordInput, phoneInput;
     private Button signupBtn;
