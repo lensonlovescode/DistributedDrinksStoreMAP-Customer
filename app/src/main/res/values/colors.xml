@@ -9,3 +9,7 @@
     <color name="text_secondary">#B0B0B0</color>
 
 </resources>
+    <color name="orange_primary">#FF7F00</color>
+    <color name="dark_background">#121212</color>
+    <color name="light_grey_background">#F0F0F0</color>
+</resources>

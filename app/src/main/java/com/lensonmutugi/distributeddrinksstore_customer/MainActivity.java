@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (token == null) {
                 // Not logged in
-                intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent = new Intent(MainActivity.this, LoginVsSignupActivity.class);
             } else {
                 // Logged in
                 intent = new Intent(MainActivity.this, BranchSelectionActivity.class);
