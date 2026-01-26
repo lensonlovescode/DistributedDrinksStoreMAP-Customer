@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -19,9 +21,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
-    private EditText nameInput, emailInput, passwordInput, phoneInput;
+    private EditText nameInput, emailInput, passwordInput, phoneInput, usernameInput;
     private Button signupBtn;
     private ProgressBar loadingBar;
 
@@ -32,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // 1. Bind UI elements
         nameInput = findViewById(R.id.inputName);
+        usernameInput = findViewById(R.id.inputUsername);
         emailInput = findViewById(R.id.inputEmail);
         passwordInput = findViewById(R.id.inputPassword);
         phoneInput = findViewById(R.id.inputPhone);
@@ -43,12 +46,13 @@ public class SignupActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String name = nameInput.getText().toString().trim();
+        String username = usernameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
         String phone = phoneInput.getText().toString().trim();
 
         // 2. Basic validation
-        if (name.isEmpty() || email.isEmpty()
+        if (name.isEmpty() || username.isEmpty() || email.isEmpty()
                 || password.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this,
                     "All fields are required",
@@ -60,16 +64,17 @@ public class SignupActivity extends AppCompatActivity {
         signupBtn.setEnabled(false);
 
         // 3. Prepare request
-        String url = "https://your-backend-url.com/api/auth/signup";
+        String url = "https://kasie-nongranular-darwin.ngrok-free.dev/signup";
 
         JSONObject body = new JSONObject();
         try {
             body.put("name", name);
+            body.put("username", username);
             body.put("email", email);
             body.put("password", password);
             body.put("phone", phone);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("SignUpActivity", "JSON body creation failed", e);
         }
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -91,7 +96,7 @@ public class SignupActivity extends AppCompatActivity {
 
                         // 6. Navigate to BranchSelection (clear back stack)
                         Intent intent = new Intent(
-                                SignupActivity.this,
+                                SignUpActivity.this,
                                 BranchSelectionActivity.class
                         );
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/light_grey_background"
-    tools:context=".LoginVsSignupActivity">
+    tools:context="com.lensonmutugi.distributeddrinksstore_customer.LoginVsSignupActivity">
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/login"
         android:backgroundTint="@color/orange_primary"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"/>
@@ -23,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         android:backgroundTint="@color/orange_primary"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"/>

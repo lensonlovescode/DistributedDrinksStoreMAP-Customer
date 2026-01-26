@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lensonmutugi.distributeddrinksstore_customer.api.ApiService;
@@ -39,7 +40,7 @@ public class PaymentActivity extends AppCompatActivity {
     private static final int MAX_POLLING_ATTEMPTS = 20;
 
     // Change this to your server URL (10.0.2.2 is localhost for emulator)
-    private static final String BASE_URL = "http://10.0.2.2:5000/"; 
+    private static final String BASE_URL = "https://kasie-nongranular-darwin.ngrok-free.dev/"; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,46 +89,67 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void initiateMpesaPush() {
         String phone = etPhoneNumber.getText().toString().trim();
-        // The backend expects orderId. Assuming it was passed from the previous activity.
-        String orderId = getIntent().getStringExtra("ORDER_ID"); 
-        
-        if (orderId == null) {
-            // For testing/fallback if ORDER_ID isn't implemented in the previous screen yet
-            orderId = "653a1234567890abcdef1234"; 
+
+        android.content.SharedPreferences prefs = getSharedPreferences("CustomerPrefs", MODE_PRIVATE);
+        String orderJson = prefs.getString("order", null);
+        String branchName = prefs.getString("selected_branch", "Unknown");
+        String totalAmountStr = prefs.getString("total_amount", "0.0");
+        double totalAmount = Double.parseDouble(totalAmountStr);
+
+        if (orderJson == null) {
+            Toast.makeText(this, "No order found.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        toggleLoading(true, "Requesting STK Push...");
+        try {
+            org.json.JSONArray orderArray = new org.json.JSONArray(orderJson);
+            if (orderArray.length() == 0) {
+                Toast.makeText(this, "Your cart is empty.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        MpesaRequest request = new MpesaRequest(phone, orderId);
-        
-        apiService.sendStkPush(request).enqueue(new Callback<MpesaResponse>() {
-            @Override
-            public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String checkoutID = response.body().getCheckoutRequestID();
-                    if (checkoutID != null) {
-                        startPolling(checkoutID);
+            // The API expects a single drink, so we'll use the first item.
+            org.json.JSONObject firstItem = orderArray.getJSONObject(0);
+            String drinkName = firstItem.getString("name");
+            int quantity = firstItem.getInt("quantity");
+
+            toggleLoading(true, "Requesting STK Push...");
+
+            MpesaRequest request = new MpesaRequest(phone, drinkName, quantity, totalAmount, branchName);
+
+            apiService.sendStkPush(request).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<MpesaResponse> call, @NonNull Response<MpesaResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String checkoutID = response.body().getCheckoutRequestID();
+                        if (checkoutID != null) {
+                            startPolling(checkoutID);
+                        } else {
+                            toggleLoading(false, null);
+                            Toast.makeText(PaymentActivity.this, "STK Error: " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         toggleLoading(false, null);
-                        Toast.makeText(PaymentActivity.this, "STK Error: " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PaymentActivity.this, "Server error during STK request", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    toggleLoading(false, null);
-                    Toast.makeText(PaymentActivity.this, "Server error during STK request", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<MpesaResponse> call, Throwable t) {
-                toggleLoading(false, null);
-                Toast.makeText(PaymentActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<MpesaResponse> call, @NonNull Throwable t) {
+                    toggleLoading(false, null);
+                    Toast.makeText(PaymentActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } catch (org.json.JSONException e) {
+            android.util.Log.e("PaymentActivity", "Error parsing order JSON", e);
+            Toast.makeText(this, "Error processing your order.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startPolling(String checkoutID) {
         pollingCount = 0;
-        tvMpesaInstruction.setText("Push sent! Enter M-Pesa PIN on your phone...");
+        tvMpesaInstruction.setText(R.string.mpesa_push_instruction);
         checkPaymentStatus(checkoutID);
     }
 
@@ -139,13 +161,13 @@ public class PaymentActivity extends AppCompatActivity {
         }
 
         pollingCount++;
-        apiService.checkStatus(checkoutID).enqueue(new Callback<MpesaResponse>() {
+        apiService.checkStatus(checkoutID).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
+            public void onResponse(@NonNull Call<MpesaResponse> call, @NonNull Response<MpesaResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String status = response.body().getStatus();
                     
-                    if ("completed".equalsIgnoreCase(status)) {
+                    if ("success".equalsIgnoreCase(status)) {
                         navigateToReceipt(response.body());
                     } else if ("failed".equalsIgnoreCase(status)) {
                         toggleLoading(false, "Payment Failed.");
@@ -161,7 +183,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MpesaResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MpesaResponse> call, @NonNull Throwable t) {
                 statusHandler.postDelayed(() -> checkPaymentStatus(checkoutID), POLLING_INTERVAL);
             }
         });
@@ -175,13 +197,36 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void navigateToReceipt(MpesaResponse response) {
         Intent intent = new Intent(this, ReceiptActivity.class);
-        intent.putExtra("TOTAL_AMOUNT", tvTotalAmount.getText().toString());
-        intent.putExtra("ORDER_ID", response.getOrderId());
-        intent.putExtra("MPESA_RECEIPT", response.getMpesaReceiptNumber());
-        startActivity(intent);
-        finish();
-    }
+        
+        // Pass Order Details
+        if (response.getOrder() != null) {
+            intent.putExtra("ORDER_ID", response.getOrder().getOrderID());
+            intent.putExtra("DRINK_NAME", response.getOrder().getDrink());
+            intent.putExtra("DRINK_QUANTITY", response.getOrder().getQuantity());
+            intent.putExtra("ORDER_TOTAL", response.getOrder().getTotal());
+            intent.putExtra("BRANCH_NAME", response.getOrder().getBranch());
+        } else {
+            intent.putExtra("ORDER_ID", "N/A");
+            intent.putExtra("DRINK_NAME", "N/A");
+            intent.putExtra("DRINK_QUANTITY", 0);
+            intent.putExtra("ORDER_TOTAL", 0.0);
+            intent.putExtra("BRANCH_NAME", "N/A");
+        }
 
+        // Pass Transaction Details
+        if (response.getTransaction() != null) {
+            intent.putExtra("TRANSACTION_AMOUNT", response.getTransaction().getAmount());
+            intent.putExtra("MPESA_RECEIPT", response.getTransaction().getMpesaCode());
+            intent.putExtra("TRANSACTION_DATE", response.getTransaction().getTransactionDate());
+        } else {
+            intent.putExtra("TRANSACTION_AMOUNT", 0.0);
+            intent.putExtra("MPESA_RECEIPT", "N/A");
+            intent.putExtra("TRANSACTION_DATE", "N/A");
+        }
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();        }
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -1,5 +1,6 @@
 package com.lensonmutugi.distributeddrinksstore_customer;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class DrinksSelectionActivity extends AppCompatActivity {
 
     private void saveOrderAndContinue() {
         JSONArray orderArray = new JSONArray();
+        double totalAmount = 0;
+        final double pricePerDrink = 50.0;
 
         try {
             for (Drink drink : drinks) {
@@ -55,17 +58,20 @@ public class DrinksSelectionActivity extends AppCompatActivity {
                     obj.put("name", drink.getName());
                     obj.put("quantity", drink.getQuantity());
                     orderArray.put(obj);
+                    totalAmount += drink.getQuantity() * pricePerDrink;
                 }
             }
 
             SharedPreferences prefs = getSharedPreferences("CustomerPrefs", MODE_PRIVATE);
-            prefs.edit().putString("order", orderArray.toString()).apply();
+            prefs.edit()
+                    .putString("order", orderArray.toString())
+                    .putString("total_amount", String.valueOf(totalAmount))
+                    .apply();
 
-            // Intent to CheckoutActivity goes here
-            // startActivity(new Intent(this, CheckoutActivity.class));
+            startActivity(new Intent(this, SelectPaymentMethodActivity.class));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("DrinksSelectionActivity", "Error saving order", e);
         }
     }
 }

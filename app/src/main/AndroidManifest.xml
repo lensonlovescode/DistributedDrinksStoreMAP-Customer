@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lensonmutugi.distributeddrinksstore_customer"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -56,14 +55,9 @@
             android:name=".ReceiptActivity"
             android:exported="false" />
 
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginVsSignupActivity" />
-        <activity android:name=".BranchSelectionActivity" />
-        <activity android:name=".DrinksSelectionActivity" />
-        <activity android:name=".PaymentActivity" />
-        <activity android:name=".ReceiptActivity" />
-        <activity android:name=".SelectPaymentMethodActivity" />
+        <activity
+            android:name=".SelectPaymentMethodActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
